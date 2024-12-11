@@ -13,29 +13,35 @@ import com.makrosoft.movies.model.Copy;
 @Mapper(componentModel = "spring", uses = IMovieMapper.class)
 public interface ICopyMapper {
 
-    @Mappings({
-        @Mapping(target = "id", source = "id"),
-        @Mapping(target = "code", source = "code"),
-        @Mapping(target = "status", source = "status"),
-        @Mapping(target = "createUser", source = "createUser"),
-        @Mapping(target = "createTime", source = "createTime")
-    })
+    /**
+     * Converts a Copy entity to a CopyDtoCreateResponse.
+     *
+     * @param copy The Copy entity to convert.
+     * @return The corresponding CopyDtoCreateResponse.
+     */
     CopyDtoCreateResponse toDtoCreate(final Copy copy);
 
-    @Mappings({
-        @Mapping(target = "id", source = "id"),
-        @Mapping(target = "code", source = "code"),
-        @Mapping(target = "status", source = "status"),
-        @Mapping(target = "createUser", source = "createUser"),
-        @Mapping(target = "createTime", source = "createTime"),
-        @Mapping(target = "updateUser", source = "updateUser"),
-        @Mapping(target = "updateTime", source = "updateTime")
-    })
+    /**
+     * Converts a Copy entity to a CopyDtoFindResponse.
+     *
+     * @param copy The Copy entity to convert.
+     * @return The corresponding CopyDtoFindResponse.
+     */
     CopyDtoFindResponse toDtoFind(final Copy copy);
 
+    /**
+     * Converts a CopyDtoCreateRequest to a Copy entity, ignoring certain fields.
+     *
+     * @param copyDtoCreateRequest The CopyDtoCreateRequest to convert.
+     * @return The corresponding Copy entity.
+     */
     @Mappings({
-        @Mapping(target = "code", source = "code"),
-        @Mapping(target = "status", source = "status")
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "createTime", ignore = true),
+        @Mapping(target = "createUser", ignore = true),
+        @Mapping(target = "updateTime", ignore = true),
+        @Mapping(target = "updateUser", ignore = true),
+        @Mapping(target = "movie", ignore = true)
     })
     Copy toEntityCreate(final CopyDtoCreateRequest copyDtoCreateRequest);
 

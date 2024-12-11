@@ -10,40 +10,40 @@ import com.makrosoft.movies.model.Rental;
 /**
  * Class that defines the mapper for converting between Rental entity and Rental DTOs.
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = ICopyMapper.class)
 public interface IRentalMapper {
 
-    @Mappings({
-        @Mapping(target = "id", source = "id"),
-        @Mapping(target = "rentalDate", source = "rentalDate"),
-        @Mapping(target = "dueDate", source = "dueDate"),
-        @Mapping(target = "amountCharged", source = "amountCharged"),
-        @Mapping(target = "customer", source = "customer"),
-        //@Mapping(target = "copyId", source = "copy.id"),
-        @Mapping(target = "createUser", source = "createUser"),
-        @Mapping(target = "createTime", source = "createTime")
-    })
+    /**
+     * Converts a Rental entity to a RentalDtoCreateResponse.
+     *
+     * @param rental The Rental entity to convert.
+     * @return The corresponding RentalDtoCreateResponse.
+     */
     RentalDtoCreateResponse toDtoCreate(final Rental rental);
 
-    @Mappings({
-        @Mapping(target = "id", source = "id"),
-        @Mapping(target = "rentalDate", source = "rentalDate"),
-        @Mapping(target = "dueDate", source = "dueDate"),
-        @Mapping(target = "returnDate", source = "returnDate"),
-        @Mapping(target = "amountCharged", source = "amountCharged"),
-        @Mapping(target = "customer", source = "customer"),
-        //@Mapping(target = "copyId", source = "copy.id"),
-        @Mapping(target = "createUser", source = "createUser"),
-        @Mapping(target = "createTime", source = "createTime"),
-        @Mapping(target = "updateUser", source = "updateUser"),
-        @Mapping(target = "updateTime", source = "updateTime")
-    })
+    /**
+     * Converts a Rental entity to a RentalDtoFindResponse.
+     *
+     * @param rental The Rental entity to convert.
+     * @return The corresponding RentalDtoFindResponse.
+     */
     RentalDtoFindResponse toDtoFind(final Rental rental);
 
+    /**
+     * Converts a RentalDtoCreateRequest to a Rental entity, ignoring certain fields.
+     *
+     * @param rentalDtoCreateRequest The RentalDtoCreateRequest to convert.
+     * @return The corresponding Rental entity.
+     */
     @Mappings({
-        @Mapping(target = "rentalDate", source = "rentalDate"),
-        @Mapping(target = "dueDate", source = "dueDate"),
-        @Mapping(target = "customer", source = "customer"),
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "amountCharged", ignore = true),
+        @Mapping(target = "returnDate", ignore = true),
+        @Mapping(target = "createTime", ignore = true),
+        @Mapping(target = "createUser", ignore = true),
+        @Mapping(target = "updateTime", ignore = true),
+        @Mapping(target = "updateUser", ignore = true),
+        @Mapping(target = "copy", ignore = true)
     })
     Rental toEntityCreate(final RentalDtoCreateRequest rentalDtoCreateRequest);
 }

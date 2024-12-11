@@ -33,8 +33,8 @@ public class MovieController {
      */
     @GetMapping("/search")
     public ResponseEntity<Response<PageableResponse<Object>>> searchAvailableMovies(
-            @RequestParam(defaultValue = "pageNumber") int pageNumber,
-            @RequestParam(defaultValue = "pageSize") int pageSize,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam("query") String query) {
         return new ResponseEntity<>(this.movieService.searchAvailableMovies(pageNumber, pageSize, query), HttpStatus.OK);
     }
@@ -47,8 +47,8 @@ public class MovieController {
      */
     @GetMapping("/report")
     public ResponseEntity<Response<PageableResponse<Object>>> getMovieReport(
-            @RequestParam(defaultValue = "pageNumber") int pageNumber,
-            @RequestParam(defaultValue = "pageSize") int pageSize) {
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize) {
         return new ResponseEntity<>(this.movieService.getMovieReport(pageNumber, pageSize), HttpStatus.OK);
     }
 

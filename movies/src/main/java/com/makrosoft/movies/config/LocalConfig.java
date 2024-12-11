@@ -8,8 +8,6 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 @Configuration
 public class LocalConfig {
 
-    // ~ Beans
-    // ====================================================================
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();

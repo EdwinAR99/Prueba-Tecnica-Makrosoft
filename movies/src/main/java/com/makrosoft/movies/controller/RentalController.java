@@ -33,28 +33,26 @@ public class RentalController {
 
     /**
      * Endpoint to rent a movie.
-     * 
+     *
      * @param movieId the id of the movie to be rented
-     * @param rentalRequest rental information
      * @return the rental record
      */
     @PostMapping("/rent/{movieId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Response<RentalDtoCreateResponse>> rentMovie(@PathVariable Integer movieId, @RequestBody @Valid RentalDtoCreateRequest rentalRequest) {
-        return new ResponseEntity<>(this.rentalService.rentMovie(movieId, rentalRequest), HttpStatus.OK);
+    public ResponseEntity<Response<RentalDtoCreateResponse>> rentMovie(@PathVariable Integer movieId) {
+        return new ResponseEntity<>(this.rentalService.rentMovie(movieId), HttpStatus.OK);
     }
 
     /**
      * Endpoint to return a movie.
-     * 
+     *
      * @param copyId the id of the copy to be returned
-     * @param rentalRequest rental information
      * @return the rental record
      */
     @PutMapping("/return/{copyId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Response<RentalDtoCreateResponse>> renturnMovie(@PathVariable Integer copyId, @RequestBody @Valid RentalDtoUpdateRequest rentalRequest) {
-        return new ResponseEntity<>(this.rentalService.returnMovie(copyId, rentalRequest), HttpStatus.OK);
+    public ResponseEntity<Response<RentalDtoCreateResponse>> renturnMovie(@PathVariable Integer copyId) {
+        return new ResponseEntity<>(this.rentalService.returnMovie(copyId), HttpStatus.OK);
     }
 
 

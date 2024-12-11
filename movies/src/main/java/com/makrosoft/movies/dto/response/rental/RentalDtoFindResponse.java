@@ -4,6 +4,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import com.makrosoft.movies.dto.response.copy.CopyDtoFindResponse;
+
 /**
  * Class that defines an entity for the search response in the RENTAL table.
  */
@@ -37,10 +39,10 @@ public class RentalDtoFindResponse {
     /** Rental last update user */
     private String updateUser;
 
-    /** Customer id */
+    /** Rental Customer */
     private String customer;
 
-    /** Copy id */
-    //private Integer copyId;
+    /** Rental Copy */
+    private CopyDtoFindResponse copy;
 
 }

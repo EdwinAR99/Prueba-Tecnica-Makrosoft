@@ -32,7 +32,4 @@ public class CopyDtoFindResponse {
     /** Movie last update user */
     private String updateUser;
 
-    /** Movie of the copy */
-    private MovieDtoFindResponse movie;
-
 }

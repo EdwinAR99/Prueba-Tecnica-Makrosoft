@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.makrosoft.movies.dto.request.rental.*;
 import com.makrosoft.movies.dto.response.rental.RentalDtoCreateResponse;
 import com.makrosoft.movies.exception.BusinessRuleException;
 import com.makrosoft.movies.mapper.IRentalMapper;
@@ -13,12 +12,14 @@ import com.makrosoft.movies.model.*;
 import com.makrosoft.movies.repository.ICopyRepository;
 import com.makrosoft.movies.repository.IMovieRepository;
 import com.makrosoft.movies.repository.IRentalRepository;
-import com.makrosoft.movies.service.IMovieService;
 import com.makrosoft.movies.service.IRentalService;
 import com.makrosoft.movies.util.response.Response;
 import com.makrosoft.movies.util.response.handler.ResponseHandler;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class RentalServiceImpl implements IRentalService {
 
     private final IMovieRepository movieRepository;
@@ -26,19 +27,11 @@ public class RentalServiceImpl implements IRentalService {
     private final IRentalRepository rentalRepository;
     private final IRentalMapper rentalMapper;
 
-    public RentalServiceImpl(IMovieRepository movieRepository, ICopyRepository copyRepository,
-            IRentalRepository rentalRepository, IRentalMapper rentalMapper) {
-        this.movieRepository = movieRepository;
-        this.copyRepository = copyRepository;
-        this.rentalRepository = rentalRepository;
-        this.rentalMapper = rentalMapper;
-    }
-
     /**
-     * @see IRentalService#rentMovie(Integer, RentalDtoCreateRequest)
+     * @see IRentalService#rentMovie(Integer)
      */
     @Override
-    public Response<RentalDtoCreateResponse> rentMovie(Integer movieId, RentalDtoCreateRequest rentalRequest) {
+    public Response<RentalDtoCreateResponse> rentMovie(Integer movieId) {
         // Find the movie by ID
         Optional<Movie> movieFound = this.movieRepository.findById(movieId);
         if (movieFound.isEmpty()) throw new BusinessRuleException("movie.request.not.found");
@@ -52,11 +45,14 @@ public class RentalServiceImpl implements IRentalService {
         this.copyRepository.save(availableCopy.get());
 
         // Create the rental record
-        Rental rental = rentalMapper.toEntityCreate(rentalRequest);
-        rental.setAmountCharged(movieFound.get().getGenre().getRentalPrice());
-        rental.setCopy(availableCopy.get());
-        rental.setCreateTime(LocalDateTime.now());
-        rental.setCreateUser("admin");
+        Rental rental = Rental.builder()
+            .rentalDate(LocalDateTime.now())
+            .dueDate(LocalDateTime.now().plusDays(7))
+            .amountCharged(movieFound.get().getGenre().getRentalPrice())
+            .createTime(LocalDateTime.now())
+            .createUser("admin")
+            .copy(availableCopy.get())
+            .build();
 
         this.rentalRepository.save(rental);
         RentalDtoCreateResponse rentalDtoCreateResponse = rentalMapper.toDtoCreate(rental);
@@ -64,12 +60,12 @@ public class RentalServiceImpl implements IRentalService {
     }
 
     /**
-     * @see IRentalService#returnMovie(Integer, RentalDtoUpdateRequest)
+     * @see IRentalService#returnMovie(Integer)
      */
     @Override
-    public Response<RentalDtoCreateResponse> returnMovie(Integer copyId, RentalDtoUpdateRequest rentalRequest) {
+    public Response<RentalDtoCreateResponse> returnMovie(Integer copyId) {
         // Find the rental by ID
-        Optional<Rental> rental = rentalRepository.findById(rentalRequest.getId());
+        Optional<Rental> rental = rentalRepository.findTopByCopyIdOrderByIdDesc(copyId);
         if (rental.isEmpty()) throw new BusinessRuleException("rental.request.not.found");
         if (rental.get().getReturnDate() != null) throw new BusinessRuleException("rental.return.date.is.full");
         if (rental.get().getCopy().getId() != copyId) throw new BusinessRuleException("rental.copy.not.equal");
@@ -83,10 +79,10 @@ public class RentalServiceImpl implements IRentalService {
 
         // Update the rental
         Rental updateRental = Rental.builder()
-            .id(rentalRequest.getId())
+            .id(rental.get().getId())
             .rentalDate(rental.get().getRentalDate())
             .dueDate(rental.get().getDueDate())
-            .returnDate(rentalRequest.getReturnDate())
+            .returnDate(LocalDateTime.now())
             .amountCharged(rental.get().getAmountCharged())
             .createTime(rental.get().getCreateTime())
             .createUser(rental.get().getCreateUser())

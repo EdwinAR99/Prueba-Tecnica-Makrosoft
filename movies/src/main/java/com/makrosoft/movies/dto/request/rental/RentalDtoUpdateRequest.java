@@ -29,8 +29,8 @@ public class RentalDtoUpdateRequest {
     private String customer;
 
     /** Rental copy id */
-    //@NotNull(message = "{rental.copy.field.not.null}")
-    //@Min(value = 1, message = "{rental.copy.field.positive}")
-    //private Integer copyId;
+    @NotNull(message = "{rental.copy.field.not.null}")
+    @Min(value = 1, message = "{rental.copy.field.positive}")
+    private Integer copyId;
 
 }

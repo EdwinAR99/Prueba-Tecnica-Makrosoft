@@ -12,32 +12,37 @@ import com.makrosoft.movies.model.Genre;
 @Mapper(componentModel = "spring")
 public interface IGenreMapper {
 
-    @Mappings({
-        @Mapping(target = "id",source = "id"),
-        @Mapping(target = "name", source = "name"),
-        @Mapping(target = "rentalPrice", source = "rentalPrice"),
-        @Mapping(target = "createTime", source = "createTime"),
-        @Mapping(target = "createUser", source = "createUser")
-    })
+    /**
+     * Converts a Genre entity to a GenreDtoCreateResponse.
+     *
+     * @param genre The Genre entity to convert.
+     * @return The corresponding GenreDtoCreateResponse.
+     */
     GenreDtoCreateResponse toDtoCreate(final Genre genre);
 
-    @Mappings({
-        @Mapping(target = "id", source = "id"),
-        @Mapping(target = "name", source = "name"),
-        @Mapping(target = "rentalPrice", source = "rentalPrice"),
-        @Mapping(target = "createTime", source = "createTime"),
-        @Mapping(target = "createUser", source = "createUser"),
-        @Mapping(target = "updateTime", source = "updateTime"),
-        @Mapping(target = "updateUser", source = "updateUser")
-    })
+    /**
+     * Converts a Genre entity to a GenreDtoFindResponse.
+     *
+     * @param genre The Genre entity to convert.
+     * @return The corresponding GenreDtoFindResponse.
+     */
     GenreDtoFindResponse toDtoFind(final Genre genre);
 
+    /**
+     * Converts a GenreDtoCreateRequest to a Genre entity, ignoring certain fields
+     * such as id, createTime, updateTime, and movies.
+     *
+     * @param genreDtoCreateRequest The GenreDtoCreateRequest to convert.
+     * @return The corresponding Genre entity.
+     */
     @Mappings({
-        @Mapping(target = "name", source = "name"),
-        @Mapping(target = "rentalPrice", source = "rentalPrice")
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "createTime", ignore = true),
+        @Mapping(target = "createUser", ignore = true),
+        @Mapping(target = "updateTime", ignore = true),
+        @Mapping(target = "updateUser", ignore = true),
+        @Mapping(target = "movies", ignore = true)
     })
     Genre toEntityCreate(final GenreDtoCreateRequest genreDtoCreateRequest);
-
-
 
 }

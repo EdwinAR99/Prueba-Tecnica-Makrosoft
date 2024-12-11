@@ -49,4 +49,5 @@ public class Rental {
     @ManyToOne(optional = false)
     @JoinColumn(name = "copyId")
     private Copy copy;
+
 }

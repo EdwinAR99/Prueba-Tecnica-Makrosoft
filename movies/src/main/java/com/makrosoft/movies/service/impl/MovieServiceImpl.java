@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.makrosoft.movies.exception.BusinessRuleException;
 import com.makrosoft.movies.mapper.IMovieMapper;
 import com.makrosoft.movies.model.Movie;
 import com.makrosoft.movies.repository.IMovieRepository;
@@ -15,17 +16,14 @@ import com.makrosoft.movies.util.response.PageableResponse;
 import com.makrosoft.movies.util.response.Response;
 import com.makrosoft.movies.util.response.handler.ResponseHandler;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class MovieServiceImpl implements IMovieService{
 
     private final IMovieRepository movieRepository;
     private final IMovieMapper movieMapper;
-
-    public MovieServiceImpl(IMovieRepository movieRepository, IMovieMapper movieMapper) {
-        this.movieRepository = movieRepository;
-        this.movieMapper = movieMapper;
-    }
-
 
     /**
      * @see IMovieService#searchAvailableMovies(Integer, Integer, String)
@@ -37,6 +35,7 @@ public class MovieServiceImpl implements IMovieService{
 
         // Fetch movies using the repository
         Page<Movie> page = movieRepository.searchMoviesByNameOrDescription(query, pageRequest);
+        if (page.getTotalElements() == 0) throw new BusinessRuleException("movie.search.name.not.found");
 
         // Map the entities to DTOs
         List<Object> movieList = page.get().map(
@@ -57,7 +56,7 @@ public class MovieServiceImpl implements IMovieService{
     }
 
     /**
-     * @see IMovieService#getMovieReport()
+     * @see IMovieService#getMovieReport(Integer, Integer)
      */
     @Override
     public Response<PageableResponse<Object>> getMovieReport(int pageNumber, int pageSize) {
@@ -66,6 +65,7 @@ public class MovieServiceImpl implements IMovieService{
 
          // Fetch data from repository
         Page<Object[]> page = movieRepository.findMovieReport(pageRequest);
+        if (page.getTotalElements() == 0) throw new BusinessRuleException("movie.rental.not.exists");
 
         // Map results to DTO and collect to list
         List<Object> movieList = page.get().map(
