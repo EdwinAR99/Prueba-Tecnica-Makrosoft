@@ -1,7 +1,6 @@
 package com.makrosoft.movies.mapper;
 
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import com.makrosoft.movies.dto.request.movie.MovieDtoCreateRequest;
 import com.makrosoft.movies.dto.response.movie.MovieDtoAvailableResponse;

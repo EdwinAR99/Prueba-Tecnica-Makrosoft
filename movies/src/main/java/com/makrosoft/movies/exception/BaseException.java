@@ -6,17 +6,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 public class BaseException extends RuntimeException {
 
-    // ~ Constants
-    // ====================================================================
-
     /**
      * The exceptions resource bundle.
      */
     private static final ResourceBundle messages =
             ResourceBundle.getBundle("exceptions", LocaleContextHolder.getLocale());
-
-    // ~ Constructors
-    // ====================================================================
 
     /**
      * Constructs a BaseException with the specified detail key message.
@@ -26,9 +20,6 @@ public class BaseException extends RuntimeException {
     BaseException(String key) {
         super(getMessage(key));
     }
-
-    // ~ Methods
-    // ====================================================================
 
     /**
      * Gets a string for the given key from the exceptions resource bundle.

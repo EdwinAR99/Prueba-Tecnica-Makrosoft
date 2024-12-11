@@ -1,6 +1,5 @@
 package com.makrosoft.movies.dto.response.copy;
 
-import com.makrosoft.movies.dto.response.movie.MovieDtoFindResponse;
 import com.makrosoft.movies.model.CopyStatusEnum;
 import lombok.*;
 
