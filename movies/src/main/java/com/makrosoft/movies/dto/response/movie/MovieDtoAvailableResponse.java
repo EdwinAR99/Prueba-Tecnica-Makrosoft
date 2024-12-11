@@ -1,5 +1,6 @@
 package com.makrosoft.movies.dto.response.movie;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,6 +9,7 @@ import lombok.Data;
  */
 @Data
 @Builder
+@AllArgsConstructor
 public class MovieDtoAvailableResponse {
 
     /** Movie id */
