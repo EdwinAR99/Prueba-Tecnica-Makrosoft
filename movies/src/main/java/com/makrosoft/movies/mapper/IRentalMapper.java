@@ -19,7 +19,7 @@ public interface IRentalMapper {
         @Mapping(target = "dueDate", source = "dueDate"),
         @Mapping(target = "amountCharged", source = "amountCharged"),
         @Mapping(target = "customer", source = "customer"),
-        @Mapping(target = "copyId", source = "copy.id"),
+        //@Mapping(target = "copyId", source = "copy.id"),
         @Mapping(target = "createUser", source = "createUser"),
         @Mapping(target = "createTime", source = "createTime")
     })
@@ -32,7 +32,7 @@ public interface IRentalMapper {
         @Mapping(target = "returnDate", source = "returnDate"),
         @Mapping(target = "amountCharged", source = "amountCharged"),
         @Mapping(target = "customer", source = "customer"),
-        @Mapping(target = "copyId", source = "copy.id"),
+        //@Mapping(target = "copyId", source = "copy.id"),
         @Mapping(target = "createUser", source = "createUser"),
         @Mapping(target = "createTime", source = "createTime"),
         @Mapping(target = "updateUser", source = "updateUser"),

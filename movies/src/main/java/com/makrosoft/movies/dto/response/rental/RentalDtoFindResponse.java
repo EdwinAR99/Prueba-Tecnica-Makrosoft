@@ -25,9 +25,6 @@ public class RentalDtoFindResponse {
     /** Rental amount charged */
     private Double amountCharged;
 
-    /** Rental status */
-    private String status;
-
     /** Rental create time */
     private LocalDateTime createTime;
 
@@ -44,6 +41,6 @@ public class RentalDtoFindResponse {
     private String customer;
 
     /** Copy id */
-    private Integer copyId;
+    //private Integer copyId;
 
 }

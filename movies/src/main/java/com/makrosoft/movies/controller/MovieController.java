@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.makrosoft.movies.service.impl.MovieServiceImpl;
+import com.makrosoft.movies.service.IMovieService;
 import com.makrosoft.movies.util.response.PageableResponse;
 import com.makrosoft.movies.util.response.Response;
 
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Validated
 public class MovieController {
 
-    private final MovieServiceImpl movieService;
+    private final IMovieService movieService;
 
     /**
      * Endpoint to search for movies by name or description and retrieve available copies.

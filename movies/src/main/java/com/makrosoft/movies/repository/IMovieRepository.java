@@ -1,5 +1,7 @@
 package com.makrosoft.movies.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,5 +25,7 @@ public interface IMovieRepository  extends JpaRepository<Movie, Integer> {
      */
     @Query("SELECT m FROM Movie m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :query, '%')) OR " + "LOWER(m.description) LIKE LOWER(CONCAT('%', :query, '%'))")
     Page<Movie> searchMoviesByNameOrDescription(String query, Pageable pageable);
+
+    Optional<Movie> findById(Integer id);
 
 }

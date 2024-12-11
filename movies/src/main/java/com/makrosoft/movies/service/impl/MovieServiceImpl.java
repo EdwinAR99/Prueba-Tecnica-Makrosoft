@@ -26,6 +26,10 @@ public class MovieServiceImpl implements IMovieService{
         this.movieMapper = movieMapper;
     }
 
+
+    /**
+     * @see IMovieService#searchAvailableMovies(Integer, Integer, String)
+     */
     @Override
     public Response<PageableResponse<Object>> searchAvailableMovies(int pageNumber, int pageSize, String query) {
 

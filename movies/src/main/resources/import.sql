@@ -7,7 +7,7 @@ INSERT INTO `movie` (`id`, `genreId`, `createTime`, `createUser`, `name`, `updat
 INSERT INTO `movie` (`id`, `genreId`, `createTime`, `createUser`, `name`, `updateTime`, `updateUser`, `description`) VALUES (NULL, 3, '2024-12-10 17:46:35', 'admin', 'La Aventura Extrema', '2024-12-10 17:46:35', NULL, 'Un thriller de acción con una peligrosa misión.');
 INSERT INTO `movie` (`id`, `genreId`, `createTime`, `createUser`, `name`, `updateTime`, `updateUser`, `description`) VALUES (NULL, 3, '2024-12-10 17:46:35', 'admin', 'Cars', '2024-12-10 17:46:35', NULL, 'Un thriller de acción con una peligrosa misión.');
 
-INSERT INTO `copy` (`id`, `movieId`, `createTime`, `createUser`, `code`, `updateTime`, `updateUser`, `status`) VALUES (NULL, 1, '2024-12-10 17:46:35', 'admin', 'COPY001', '2024-12-10 17:46:35', NULL, 'DISPONIBLE');
+INSERT INTO `copy` (`id`, `movieId`, `createTime`, `createUser`, `code`, `updateTime`, `updateUser`, `status`) VALUES (NULL, 1, '2024-12-10 17:46:35', 'admin', 'COPY001', '2024-12-10 17:46:35', NULL, 'ALQUILADA');
 INSERT INTO `copy` (`id`, `movieId`, `createTime`, `createUser`, `code`, `updateTime`, `updateUser`, `status`) VALUES (NULL, 1, '2024-12-10 17:46:35', 'admin', 'COPY002', '2024-12-10 17:46:35', NULL, 'DISPONIBLE');
 INSERT INTO `copy` (`id`, `movieId`, `createTime`, `createUser`, `code`, `updateTime`, `updateUser`, `status`) VALUES (NULL, 1, '2024-12-10 17:46:35', 'admin', 'COPY003', '2024-12-10 17:46:35', NULL, 'DISPONIBLE');
 INSERT INTO `copy` (`id`, `movieId`, `createTime`, `createUser`, `code`, `updateTime`, `updateUser`, `status`) VALUES (NULL, 2, '2024-12-10 17:46:35', 'admin', 'COPY004', '2024-12-10 17:46:35', NULL, 'DISPONIBLE');
