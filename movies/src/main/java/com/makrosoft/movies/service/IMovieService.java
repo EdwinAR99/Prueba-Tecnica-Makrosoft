@@ -18,4 +18,12 @@ public interface IMovieService {
      */
     Response<PageableResponse<Object>> searchAvailableMovies(int pageNumber, int pageSize, String query);
 
+    /**
+     * Get the movie rental report.
+     * 
+     * @param pageNumber The page number.
+     * @param pageSize   The size of the page.
+     * @return List of MovieReportDto
+     */
+    Response<PageableResponse<Object>> getMovieReport(int pageNumber, int pageSize);
 }

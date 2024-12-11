@@ -39,4 +39,17 @@ public class MovieController {
         return new ResponseEntity<>(this.movieService.searchAvailableMovies(pageNumber, pageSize, query), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to get the movie rental report as a list.
+     *
+     * @param pageable the pagination information
+     * @return List of MovieReportDto
+     */
+    @GetMapping("/report")
+    public ResponseEntity<Response<PageableResponse<Object>>> getMovieReport(
+            @RequestParam(defaultValue = "pageNumber") int pageNumber,
+            @RequestParam(defaultValue = "pageSize") int pageSize) {
+        return new ResponseEntity<>(this.movieService.getMovieReport(pageNumber, pageSize), HttpStatus.OK);
+    }
+
 }

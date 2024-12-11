@@ -40,8 +40,8 @@ public class MovieServiceImpl implements IMovieService{
 
         // Map the entities to DTOs
         List<Object> movieList = page.get().map(
-                this.movieMapper::toDtoAvailable)
-        .collect(Collectors.toList());
+                this.movieMapper::toDtoAvailable
+        ).collect(Collectors.toList());
 
         // Build a paginated response
         PageableResponse<Object> response = PageableResponse.builder()
@@ -52,8 +52,39 @@ public class MovieServiceImpl implements IMovieService{
                 .last(page.isLast())
                 .build();
 
-        System.out.println(query);
-        System.out.println(response.getData());
+        // Return the response using a handler
+        return new ResponseHandler<>(200, "Movies found successfully", "", response).getResponse();
+    }
+
+    /**
+     * @see IMovieService#getMovieReport()
+     */
+    @Override
+    public Response<PageableResponse<Object>> getMovieReport(int pageNumber, int pageSize) {
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+         // Fetch data from repository
+        Page<Object[]> page = movieRepository.findMovieReport(pageRequest);
+
+        // Map results to DTO and collect to list
+        List<Object> movieList = page.get().map(
+            record -> movieMapper.toDtoReport(
+                (String) record[0],
+                (String) record[1],
+                ((Number) record[2]).longValue(),
+                ((Number) record[3]).doubleValue()
+        )).collect(Collectors.toList());
+
+        // Build a paginated response
+        PageableResponse<Object> response = PageableResponse.builder()
+            .data(movieList)
+            .pageNo(page.getNumber())
+            .pageSize(page.getSize())
+            .totalElements(page.getTotalElements())
+            .last(page.isLast())
+            .build();
+
         // Return the response using a handler
         return new ResponseHandler<>(200, "Movies found successfully", "", response).getResponse();
     }

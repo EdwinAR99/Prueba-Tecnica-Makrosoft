@@ -7,6 +7,7 @@ import com.makrosoft.movies.dto.request.movie.MovieDtoCreateRequest;
 import com.makrosoft.movies.dto.response.movie.MovieDtoAvailableResponse;
 import com.makrosoft.movies.dto.response.movie.MovieDtoCreateResponse;
 import com.makrosoft.movies.dto.response.movie.MovieDtoFindResponse;
+import com.makrosoft.movies.dto.response.movie.MovieDtoReportResponse;
 import com.makrosoft.movies.model.CopyStatusEnum;
 import com.makrosoft.movies.model.Movie;
 
@@ -47,7 +48,9 @@ public interface IMovieMapper {
     })
     Movie toEntityCreate(final MovieDtoCreateRequest movieDtoCreateRequest);
 
-    @Mapping(target = "availableCopies", expression = "java(getAvailableCopies(movie))")
+    @Mappings(
+        @Mapping(target = "availableCopies", expression = "java(getAvailableCopies(movie))")
+    )
     MovieDtoAvailableResponse toDtoAvailable(Movie movie);
 
     default int getAvailableCopies(Movie movie) {
@@ -55,5 +58,13 @@ public interface IMovieMapper {
                 .filter(copy -> copy.getStatus().equals(CopyStatusEnum.DISPONIBLE))
                 .count();
     }
+
+    @Mappings({
+        @Mapping(target = "name", source = "name"),
+        @Mapping(target = "description", source = "description"),
+        @Mapping(target = "timesRented", source = "timesRented"),
+        @Mapping(target = "totalRevenue", source = "totalRevenue")
+    })
+    MovieDtoReportResponse toDtoReport(String name, String description, Long timesRented, Double totalRevenue);
 
 }

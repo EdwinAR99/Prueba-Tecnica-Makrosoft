@@ -6,7 +6,6 @@ import com.makrosoft.movies.util.response.Response;
 
 public interface IRentalService {
 
-    // TODO Cambiar metodo para que solo reciba el movieId
     /**
      * Rent a movie by updating a copy's status and creating a rental record.
      *
@@ -24,8 +23,5 @@ public interface IRentalService {
      * @return the created rental record
      */
     Response<RentalDtoCreateResponse> returnMovie(Integer copyId, RentalDtoUpdateRequest rentalRequest);
-
-
-    // TODO Implementar HU004 - Reporte de peliculas
 
 }

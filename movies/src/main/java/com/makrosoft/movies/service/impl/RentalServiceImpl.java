@@ -56,6 +56,7 @@ public class RentalServiceImpl implements IRentalService {
         rental.setAmountCharged(movieFound.get().getGenre().getRentalPrice());
         rental.setCopy(availableCopy.get());
         rental.setCreateTime(LocalDateTime.now());
+        rental.setCreateUser("admin");
 
         this.rentalRepository.save(rental);
         RentalDtoCreateResponse rentalDtoCreateResponse = rentalMapper.toDtoCreate(rental);
@@ -70,11 +71,17 @@ public class RentalServiceImpl implements IRentalService {
         // Find the rental by ID
         Optional<Rental> rental = rentalRepository.findById(rentalRequest.getId());
         if (rental.isEmpty()) throw new BusinessRuleException("rental.request.not.found");
+        if (rental.get().getReturnDate() != null) throw new BusinessRuleException("rental.return.date.is.full");
+        if (rental.get().getCopy().getId() != copyId) throw new BusinessRuleException("rental.copy.not.equal");
 
         // Find the copy by ID
         Optional<Copy> availableCopy = this.copyRepository.findById(copyId);
-        if (availableCopy.isEmpty()) throw new BusinessRuleException("copy.available.request.not.found");
+        if (availableCopy.isEmpty()) throw new BusinessRuleException("copy.request.not.found");
 
+        // Free the copy
+        availableCopy.get().setStatus(CopyStatusEnum.DISPONIBLE);
+
+        // Update the rental
         Rental updateRental = Rental.builder()
             .id(rentalRequest.getId())
             .rentalDate(rental.get().getRentalDate())
@@ -88,7 +95,7 @@ public class RentalServiceImpl implements IRentalService {
             .customer(rental.get().getCustomer())
             .copy(availableCopy.get())
             .build();
-        
+
         Rental rentalUpdated = this.rentalRepository.save(updateRental);
         RentalDtoCreateResponse rentalDtoCreateResponse = rentalMapper.toDtoCreate(rentalUpdated);
 
