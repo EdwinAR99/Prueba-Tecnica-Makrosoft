@@ -34,6 +34,7 @@ El sistema de alquiler de películas es una aplicación desarrollada con **Sprin
 - **Maven** como herramienta de gestión de dependencias
 - **Lombok** para reducir el código boilerplate
 - **MapStruct** para mapear entidades y DTOs
+-- **Docker** para contenerización y despliegue
 
 ## Arquitectura del Proyecto
 
@@ -85,15 +86,77 @@ Estas son las credenciales del AUTH para las peticiones:
 
 - JDK 21
 - Maven 3.8+
+- Docker (para contenerización y despliegue)
 
 ### Configuración de Base de Datos
 
-El proyecto utiliza H2 como base de datos embebida para facilitar el desarrollo y las pruebas. La consola de H2 está disponible en:
+El proyecto utiliza MySQL como base de datos para facilitar el desarrollo y las pruebas.
 
 - **URL**: `jdbc:mysql://localhost/makrosoft?useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true`
 - **JDBC URL**: `com.mysql.cj.jdbc.Driver`
 - **Usuario**: `root`
 - **Contraseña**: (vacío)
+
+### Docker
+
+Este proyecto se puede ejecutar dentro de contenedores Docker para facilitar el despliegue y la ejecución. A continuación, se detallan los pasos para construir y ejecutar el proyecto con Docker:
+
+1. **Construir la imagen Docker**: El archivo `Dockerfile` en el directorio raíz del proyecto, contiene la configuración necesaria para empaquetar la aplicación Spring Boot en un contenedor Docker.
+
+```
+  # Usar una imagen base de Java
+  FROM openjdk:21-jdk-slim
+
+  # Copiar el archivo JAR del proyecto al contenedor
+  COPY target/movies-0.0.1-SNAPSHOT.jar app.jar
+
+  # Configurar el contenedor para ejecutar la aplicación Spring Boot
+  ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+El siguiente comando construye la imagen Docker a partir del `Dockerfile`:
+
+```
+  docker build -t movies-app .
+```
+
+2. **Configurar Docker Compose**: Para gestionar tanto la aplicación Spring Boot como la base de datos MySQL en contenedores separados, se uso Docker Compose. El archivo `docker-compose.yml` define ambos servicios:
+
+```
+  version: "3.9"
+  services:
+    app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: movies-app-container
+      ports:
+        - "9090:9090"
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/makrosoft?useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: rootpassword
+      depends_on:
+        - db
+    db:
+      image: mysql:8.2.4
+      container_name: mysql-db
+      environment:
+        MYSQL_ROOT_PASSWORD: rootpassword
+        MYSQL_DATABASE: makrosoft
+      ports:
+        - "3306:3306"
+```
+
+Para ejecutar ambos contenedores (la aplicación y la base de datos MySQL), utiliza Docker Compose:
+
+```
+  docker-compose up --build
+```
+
+3. **Acceso a la aplicación**:
+
+Una vez que los contenedores estén en ejecución, la aplicación Spring Boot estará disponible en `http://localhost:9090`.
 
 ### Ejecutar el Proyecto
 
