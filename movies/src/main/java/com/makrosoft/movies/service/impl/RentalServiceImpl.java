@@ -70,6 +70,7 @@ public class RentalServiceImpl implements IRentalService {
         if (rental.get().getReturnDate() != null) throw new BusinessRuleException("rental.return.date.is.full");
         if (rental.get().getCopy().getId() != copyId) throw new BusinessRuleException("rental.copy.not.equal");
 
+
         // Find the copy by ID
         Optional<Copy> availableCopy = this.copyRepository.findById(copyId);
         if (availableCopy.isEmpty()) throw new BusinessRuleException("copy.request.not.found");
@@ -91,6 +92,11 @@ public class RentalServiceImpl implements IRentalService {
             .customer(rental.get().getCustomer())
             .copy(availableCopy.get())
             .build();
+
+        // Compare dates
+        if (rental.get().getDueDate().isBefore(LocalDateTime.now())) {
+            updateRental.setAmountCharged(rental.get().getAmountCharged() + 5000);;
+        }
 
         Rental rentalUpdated = this.rentalRepository.save(updateRental);
         RentalDtoCreateResponse rentalDtoCreateResponse = rentalMapper.toDtoCreate(rentalUpdated);

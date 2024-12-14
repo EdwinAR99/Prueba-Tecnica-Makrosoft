@@ -1,0 +1,14 @@
+# Usa una imagen base de Java
+FROM openjdk:21-jdk-slim
+
+# Configura el directorio de trabajo
+WORKDIR /app
+
+# Copia el JAR del proyecto al contenedor
+COPY target/movies-0.0.1-SNAPSHOT.jar app.jar
+
+# Expone el puerto en el que corre tu aplicación (por defecto 8080)
+EXPOSE 9090
+
+# Comando para ejecutar la aplicación
+ENTRYPOINT ["java", "-jar", "app.jar"]

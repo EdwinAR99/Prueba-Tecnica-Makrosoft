@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: movies-app
+    container_name: movies-app-container
+    ports:
+      - "9090:9090" # Mapea el puerto de la aplicación
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/makrosoft?useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: makrosoft
+    ports:
+      - "3306:3306" # Mapea el puerto de MySQL
