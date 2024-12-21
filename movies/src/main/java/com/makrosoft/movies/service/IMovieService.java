@@ -9,6 +9,18 @@ import com.makrosoft.movies.util.response.Response;
 public interface IMovieService {
 
     /**
+     * Retrieves all movies with pagination and filters.
+     *
+     * @param pageNumber The page number to retrieve.
+     * @param pageSize   The size of each page.
+     * @param id         The ID of the movie to filter by (optional).
+     * @param name       The name of the movie to filter by (optional).
+     * @param description The description of the movie to filter by (optional).
+     * @return A paginated response containing movies.
+     */
+    Response<PageableResponse<Object>> getAllMovies(int pageNumber, int pageSize, Integer id, String name, String description);
+
+    /**
      * Searches for movies by name or description, retrieving their available copies with pagination.
      *
      * @param pageNumber The page number to retrieve.

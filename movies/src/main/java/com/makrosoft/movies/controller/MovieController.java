@@ -26,6 +26,26 @@ public class MovieController {
     private final IMovieService movieService;
 
     /**
+     * Endpoint to get all movies with optional filters.
+     *
+     * @param pageNumber The page number to retrieve.
+     * @param pageSize The size of each page.
+     * @param id The ID of the movie to filter by (optional).
+     * @param name The name of the movie to filter by (optional).
+     * @param description The description of the movie to filter by (optional).
+     * @return A paginated response containing movies.
+     */
+    @GetMapping
+    public ResponseEntity<Response<PageableResponse<Object>>> getAllMovies(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String description) {
+        return new ResponseEntity<>(this.movieService.getAllMovies(pageNumber, pageSize, id, name, description), HttpStatus.OK);
+    }
+
+    /**
      * Endpoint to search for movies by name or description and retrieve available copies.
      *
      * @param query The search query (name or description).

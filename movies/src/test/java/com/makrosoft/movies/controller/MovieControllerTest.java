@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.makrosoft.movies.dto.response.movie.MovieDtoAvailableResponse;
+import com.makrosoft.movies.dto.response.movie.MovieDtoFindResponse;
 import com.makrosoft.movies.service.IMovieService;
 import com.makrosoft.movies.util.response.PageableResponse;
 import com.makrosoft.movies.util.response.Response;
@@ -101,5 +102,98 @@ public class MovieControllerTest {
                 .andExpect(jsonPath("$.data.data", hasSize(0)))  // Verificamos que no haya contenido
                 .andExpect(jsonPath("$.data.totalElements", is(0)))  // Verificamos que no haya resultados
                 .andExpect(jsonPath("$.data.totalPages", is(0)));  // Verificamos que no haya páginas
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "1245", roles = "ADMIN")
+    public void testGetAllMovies() throws Exception {
+        // Datos de entrada
+        int pageNumber = 0;
+        int pageSize = 10;
+        Integer id = null;
+        String name = "Inception";
+        String description = null;
+
+        // Datos de prueba para la respuesta del servicio
+        PageableResponse<Object> pageableResponse = new PageableResponse<>();
+        pageableResponse.setData(Arrays.asList(new MovieDtoFindResponse()));
+        pageableResponse.setTotalElements(1L);
+        pageableResponse.setTotalPages(1);
+
+        Response<PageableResponse<Object>> response = new Response<>();
+        response.setData(pageableResponse);
+
+        when(movieService.getAllMovies(pageNumber, pageSize, id, name, description)).thenReturn(response);
+
+        // Ejecución y verificación
+        mockMvc.perform(MockMvcRequestBuilders.get("/movies")
+                .param("pageNumber", String.valueOf(pageNumber))
+                .param("pageSize", String.valueOf(pageSize))
+                .param("name", name))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.totalElements", is(1)))
+                .andExpect(jsonPath("$.data.data", hasSize(1)));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "1245", roles = "ADMIN")
+    public void testGetAllMoviesWithId() throws Exception {
+        // Datos de entrada
+        int pageNumber = 0;
+        int pageSize = 10;
+        Integer id = 1;
+        String name = null;
+        String description = null;
+
+        // Datos de prueba para la respuesta del servicio
+        PageableResponse<Object> pageableResponse = new PageableResponse<>();
+        pageableResponse.setData(Arrays.asList(new MovieDtoFindResponse()));
+        pageableResponse.setTotalElements(1L);
+        pageableResponse.setTotalPages(1);
+
+        Response<PageableResponse<Object>> response = new Response<>();
+        response.setData(pageableResponse);
+
+        when(movieService.getAllMovies(pageNumber, pageSize, id, name, description)).thenReturn(response);
+
+        // Ejecución y verificación
+        mockMvc.perform(MockMvcRequestBuilders.get("/movies")
+                .param("pageNumber", String.valueOf(pageNumber))
+                .param("pageSize", String.valueOf(pageSize))
+                .param("id", String.valueOf(id)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.totalElements", is(1)))
+                .andExpect(jsonPath("$.data.data", hasSize(1)));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "1245", roles = "ADMIN")
+    public void testGetAllMoviesWithDescription() throws Exception {
+        // Datos de entrada
+        int pageNumber = 0;
+        int pageSize = 10;
+        Integer id = null;
+        String name = null;
+        String description = "thriller";
+
+        // Datos de prueba para la respuesta del servicio
+        PageableResponse<Object> pageableResponse = new PageableResponse<>();
+        pageableResponse.setData(Arrays.asList(new MovieDtoFindResponse()));
+        pageableResponse.setTotalElements(1L);
+        pageableResponse.setTotalPages(1);
+
+        Response<PageableResponse<Object>> response = new Response<>();
+        response.setData(pageableResponse);
+
+        when(movieService.getAllMovies(pageNumber, pageSize, id, name, description)).thenReturn(response);
+
+        // Ejecución y verificación
+        mockMvc.perform(MockMvcRequestBuilders.get("/movies")
+                .param("pageNumber", String.valueOf(pageNumber))
+                .param("pageSize", String.valueOf(pageSize))
+                .param("description", description))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.totalElements", is(1)))
+                .andExpect(jsonPath("$.data.data", hasSize(1)));
     }
 }

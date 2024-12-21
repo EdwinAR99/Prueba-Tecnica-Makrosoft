@@ -41,4 +41,45 @@ public interface IMovieRepository  extends JpaRepository<Movie, Integer> {
             "ORDER BY totalRevenue DESC")
     Page<Object[]> findMovieReport(Pageable pageable);
 
+    /**
+     * Finds movies by ID.
+     *
+     * @param id The ID of the movie.
+     * @param pageable The pageable object for pagination.
+     * @return A page of movies matching the ID.
+     */
+    @Query("SELECT m FROM Movie m WHERE m.id = :id")
+    Page<Movie> findById(Integer id, Pageable pageable);
+
+    /**
+     * Finds movies by name.
+     *
+     * @param name The name of the movie.
+     * @param pageable The pageable object for pagination.
+     * @return A page of movies matching the name.
+     */
+    @Query("SELECT m FROM Movie m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+    Page<Movie> findByName(String name, Pageable pageable);
+
+    /**
+     * Finds movies by description.
+     *
+     * @param description The description of the movie.
+     * @param pageable The pageable object for pagination.
+     * @return A page of movies matching the description.
+     */
+    @Query("SELECT m FROM Movie m WHERE LOWER(m.description) LIKE LOWER(CONCAT('%', :description, '%'))")
+    Page<Movie> findByDescription(String description, Pageable pageable);
+
+    /**
+     * Finds movies by name and description.
+     *
+     * @param name The name of the movie.
+     * @param description The description of the movie.
+     * @param pageable The pageable object for pagination.
+     * @return A page of movies matching the name and description.
+     */
+    @Query("SELECT m FROM Movie m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :name, '%')) AND LOWER(m.description) LIKE LOWER(CONCAT('%', :description, '%'))")
+    Page<Movie> findByNameAndDescription(String name, String description, Pageable pageable);
+
 }

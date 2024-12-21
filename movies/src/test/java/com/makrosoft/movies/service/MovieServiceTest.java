@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import com.makrosoft.movies.dto.response.movie.MovieDtoAvailableResponse;
+import com.makrosoft.movies.dto.response.movie.MovieDtoFindResponse;
 import com.makrosoft.movies.exception.BusinessRuleException;
 import com.makrosoft.movies.mapper.IMovieMapper;
 import com.makrosoft.movies.model.Movie;
@@ -106,4 +107,111 @@ public class MovieServiceTest {
         });
     }
 
+    @Test
+    void testGetAllMovies() {
+        // Datos de entrada
+        int pageNumber = 0;
+        int pageSize = 10;
+        Integer id = null;
+        String name = "Inception";
+        String description = null;
+
+        // Datos simulados
+        Movie movie = new Movie();
+        movie.setId(1);
+        movie.setName("Inception");
+        movie.setDescription("A mind-bending thriller");
+
+        Page<Movie> moviePage = new PageImpl<>(Arrays.asList(movie), PageRequest.of(pageNumber, pageSize), 1);
+
+        when(movieRepository.findByName(name, PageRequest.of(pageNumber, pageSize)))
+                .thenReturn(moviePage);
+        when(movieMapper.toDtoFind(movie)).thenReturn(new MovieDtoFindResponse());
+
+        // Ejecución del método
+        Response<PageableResponse<Object>> response = movieService.getAllMovies(pageNumber, pageSize, id, name, description);
+
+        // Verificaciones
+        assertNotNull(response);
+        assertEquals(1, response.getData().getTotalElements());
+    }
+
+    @Test
+    void testGetAllMoviesWithId() {
+        // Datos de entrada
+        int pageNumber = 0;
+        int pageSize = 10;
+        Integer id = 1;
+        String name = null;
+        String description = null;
+
+        // Datos simulados
+        Movie movie = new Movie();
+        movie.setId(1);
+        movie.setName("Inception");
+        movie.setDescription("A mind-bending thriller");
+
+        Page<Movie> moviePage = new PageImpl<>(Arrays.asList(movie), PageRequest.of(pageNumber, pageSize), 1);
+
+        when(movieRepository.findById(id, PageRequest.of(pageNumber, pageSize)))
+                .thenReturn(moviePage);
+        when(movieMapper.toDtoFind(movie)).thenReturn(new MovieDtoFindResponse());
+
+        // Ejecución del método
+        Response<PageableResponse<Object>> response = movieService.getAllMovies(pageNumber, pageSize, id, name, description);
+
+        // Verificaciones
+        assertNotNull(response);
+        assertEquals(1, response.getData().getTotalElements());
+    }
+
+    @Test
+    void testGetAllMoviesWithDescription() {
+        // Datos de entrada
+        int pageNumber = 0;
+        int pageSize = 10;
+        Integer id = null;
+        String name = null;
+        String description = "thriller";
+
+        // Datos simulados
+        Movie movie = new Movie();
+        movie.setId(1);
+        movie.setName("Inception");
+        movie.setDescription("A mind-bending thriller");
+
+        Page<Movie> moviePage = new PageImpl<>(Arrays.asList(movie), PageRequest.of(pageNumber, pageSize), 1);
+
+        when(movieRepository.findByDescription(description, PageRequest.of(pageNumber, pageSize)))
+                .thenReturn(moviePage);
+        when(movieMapper.toDtoFind(movie)).thenReturn(new MovieDtoFindResponse());
+
+        // Ejecución del método
+        Response<PageableResponse<Object>> response = movieService.getAllMovies(pageNumber, pageSize, id, name, description);
+
+        // Verificaciones
+        assertNotNull(response);
+        assertEquals(1, response.getData().getTotalElements());
+    }
+
+    @Test
+    void testGetAllMoviesNotFound() {
+        // Datos de entrada
+        int pageNumber = 0;
+        int pageSize = 10;
+        Integer id = null;
+        String name = "NonExistentMovie";
+        String description = null;
+
+        // Datos simulados
+        Page<Movie> moviePage = new PageImpl<>(Arrays.asList(), PageRequest.of(pageNumber, pageSize), 0);
+
+        when(movieRepository.findByName(name, PageRequest.of(pageNumber, pageSize)))
+                .thenReturn(moviePage);
+
+        // Ejecución del método y verificación de excepción
+        assertThrows(BusinessRuleException.class, () -> {
+            movieService.getAllMovies(pageNumber, pageSize, id, name, description);
+        });
+    }
 }
